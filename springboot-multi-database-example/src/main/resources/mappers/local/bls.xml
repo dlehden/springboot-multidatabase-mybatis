@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="multi.database.mapper.local.BlMapper">
+    <resultMap type="multi.database.dto.local.BlInfoDTO" id="blInfoDTO">
+        <id property="blno" column="blno"/>
+        <result property="shipper" column="shipper"/>
+        <result property="consignee" column="consignee"/>
+        <collection property="blCntrInfo" ofType="multi.database.dto.local.BlCntrDTO" javaType="java.util.List">
+            <id property="cntrno" column="cntrno"/>
+            <id property="blno" column="blno"/>
+            <result property="wgt" column="wgt"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="selectBlhd" resultType="multi.database.dto.local.BlhdDTO">
+		SELECT blno,shipper,consignee
+		FROM local.bl_hd
+	</select>
+	
+	<select id="selectBlInfo" resultMap="blInfoDTO">
+		select 
+			hd.blno , 
+			hd.shipper,
+			hd.consignee,
+			cntr.cntrno, 
+			cntr.wgt
+ 			from bl_hd as hd 
+ 			left join bl_cntr as cntr
+			on hd.BLNO = cntr.BLNO
+	</select>
+	
+</mapper>
